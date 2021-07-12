@@ -24,7 +24,6 @@ import { ContentRecordDAC } from '@skynetlabs/content-record-library';
 
 
 
-
 // Import the SkynetClient and a helper
 import { SkynetClient,genKeyPairFromSeed } from 'skynet-js';
 
@@ -34,12 +33,9 @@ const portal =
   window.location.hostname === 'localhost' ? 'https://siasky.net' : undefined;
 
 // Initiate the SkynetClient
-const client = new SkynetClient();
-const { privateKey } = genKeyPairFromSeed("this seed should be fairly long for security");
-const { publicKey } = genKeyPairFromSeed("this seed should be fairly long for security");
-
-const dataKey = "myApp";
-
+const client = new SkynetClient(portal);
+const { privateKey } = genKeyPairFromSeed("dorser hammock outgrow tannery ominous muffin");
+const { publicKey } = genKeyPairFromSeed("dorser hammock outgrow tannery ominous muffin");
 
 /*****/
 
@@ -48,7 +44,6 @@ const dataKey = "myApp";
 /************************************************/
 
 const contentRecord = new ContentRecordDAC();
-
 
 
 /*****/
@@ -364,25 +359,29 @@ getTodoList();
 
     setLoading(false);
   };
+  
 
-
-  const handleTodoSubmit = async(action) => {
+  const handleTodoSubmit = async(action,id) => {
     try {
      
 
       var list = todoList;
       if(action == 'add')
       {
-        list.push({todo:todo});
+        list.push({todo:todo,id:id});
       }
       else if (action == 'remove'){
-        list.pop();
+
+        list = list.filter(item => {
+          return item.id != id;
+        })
       }
       const json = { list: list };
       setLoading(true);
+      setTodoList(json.list);
       await client.db.setJSON(privateKey, dataKey, json);
       setLoading(false);
-      getTodoList();
+
     } catch (error) {
       console.log(error);
     }

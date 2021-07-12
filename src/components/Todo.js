@@ -15,6 +15,18 @@ import {
 import { PopoverPicker } from './PopoverPicker';
 
 
+const makeid = (length) => {
+    var result           = '';
+    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for ( var i = 0; i < length; i++ ) {
+      result += characters.charAt(Math.floor(Math.random() * 
+  charactersLength));
+   }
+   return result;
+  }
+  
+
 // Todo is a simple form used for the Skynet Workshop
 const Todo = (props) => {
   const [uploadPreview, setUploadPreview] = useState(props.fileSkylink);
@@ -26,9 +38,7 @@ const Todo = (props) => {
   return (
     <>
       <Segment>
-        <Dimmer active={props.loading}>
-          <Loader active={props.loading} />
-        </Dimmer>
+        
 
        
             {props.loggedIn === true && (
@@ -42,11 +52,6 @@ const Todo = (props) => {
               </Button>
             )}
             {props.loggedIn === null && <Button>Loading MySky...</Button>}
-            {props.activeTab === 2 && (
-              <Label pointing="left" color="green" basic>
-                Once logged into MySky, we can save and load data in "files".
-              </Label>
-            )}
             <Divider />
          
         {props.loggedIn === true && (
@@ -70,11 +75,12 @@ const Todo = (props) => {
                                     color='teal'
                                     content='Add Item'
                                     icon='add'
+                                    disabled={props.loading}
                                     labelPosition='left'
                                     
-                                    onClick={()=>{props.handleTodoSubmit('add')}}
+                                    onClick={()=>{props.handleTodoSubmit('add',makeid(25))}}
                                     />
-                
+                                <Loader active={props.loading} inline />
                                 
                             </Form.Group>
                 </Form>
@@ -106,7 +112,8 @@ const Todo = (props) => {
                                                 content='Remove Item'
                                                 icon='remove'
                                                 labelPosition='left'
-                                                onClick={()=>{props.handleTodoSubmit('remove')}}
+                                                disabled={props.loading}
+                                                onClick={()=>{props.handleTodoSubmit('remove',item.id)}}
                                                 />
                                         </Table.Cell>
                                  </Table.Row>
@@ -120,6 +127,8 @@ const Todo = (props) => {
              
           </>
         )}
+
+        
       </Segment>
     </>
   );
