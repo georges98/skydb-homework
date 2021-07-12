@@ -33,7 +33,7 @@ const portal =
   window.location.hostname === 'localhost' ? 'https://siasky.net' : undefined;
 
 // Initiate the SkynetClient
-const client = new SkynetClient(portal);
+const client = new SkynetClient();
 const { privateKey } = genKeyPairFromSeed("dorser hammock outgrow tannery ominous muffin");
 const { publicKey } = genKeyPairFromSeed("dorser hammock outgrow tannery ominous muffin");
 
