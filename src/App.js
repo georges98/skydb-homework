@@ -119,8 +119,8 @@ async function initMySky() {
 
     // set react state for login status and
     // to access mySky in rest of app
-    setMySky(mySky);
-    setLoggedIn(loggedIn);
+    await setMySky(mySky);
+    await setLoggedIn(loggedIn);
     if (loggedIn) {
       setUserID(await mySky.userID());
     }
@@ -130,9 +130,9 @@ async function initMySky() {
 }
 
 // call async setup function
-initMySky();
+ initMySky();
 
-getTodoList();
+
 
 
 
@@ -266,6 +266,7 @@ getTodoList();
     //set react state
     setLoggedIn(false);
     setUserID('');
+    setTodoList([]);
 
 
 
@@ -379,7 +380,7 @@ getTodoList();
       const json = { list: list };
       setLoading(true);
       setTodoList(json.list);
-      await client.db.setJSON(privateKey, dataKey, json);
+      await mySky.setJSON(filePath, json);
       setLoading(false);
 
     } catch (error) {
@@ -394,12 +395,17 @@ getTodoList();
 
   const getTodoList = async() => {
     try {
-      
-      const { data, dataLink } = await client.db.getJSON(publicKey, dataKey);
-      setTodoList(data.list);
-      console.log("list");
-      console.log(data.list);
-      
+      setLoading(true);
+      const { data } = await mySky.getJSON(filePath);
+      if(data)
+      {
+        setTodoList(data.list);
+        console.log("list");
+        console.log(data.list);
+      }
+     
+     
+      setLoading(false);
 
 
     } catch (error) {
@@ -433,7 +439,8 @@ getTodoList();
     setTodo,
     todo,
     handleTodoSubmit,
-    todoList
+    todoList,
+    getTodoList
   };
 
   // handleSelectTab handles selecting the part of the workshop

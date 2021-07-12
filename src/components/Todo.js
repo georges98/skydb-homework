@@ -32,8 +32,12 @@ const Todo = (props) => {
   const [uploadPreview, setUploadPreview] = useState(props.fileSkylink);
 
   useEffect(() => {
-    setUploadPreview(props.fileSkylink);
-  }, [props.fileSkylink]);
+      if(props.loggedIn === true)
+      {
+        props.getTodoList();
+      }
+   
+  }, [props.loggedIn]);
 
   return (
     <>
@@ -45,6 +49,7 @@ const Todo = (props) => {
               <Button onClick={props.handleMySkyLogout}>
                 Log Out of MySky
               </Button>
+            
             )}
             {props.loggedIn === false && (
               <Button color="green" onClick={props.handleMySkyLogin}>
@@ -53,12 +58,14 @@ const Todo = (props) => {
             )}
             {props.loggedIn === null && <Button>Loading MySky...</Button>}
             <Divider />
+           
          
         {props.loggedIn === true && (
           <>
                 <Header as="h4">Title</Header>
               
                       <Form >
+                     
                             <Form.Group >
                         
                              
@@ -80,6 +87,7 @@ const Todo = (props) => {
                                     
                                     onClick={()=>{props.handleTodoSubmit('add',makeid(25))}}
                                     />
+                     
                                 <Loader active={props.loading} inline />
                                 
                             </Form.Group>
